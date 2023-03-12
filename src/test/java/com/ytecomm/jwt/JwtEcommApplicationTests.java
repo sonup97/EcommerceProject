@@ -1,4 +1,4 @@
-package com.ytecomm.jwtecomm;
+package com.ytecomm.jwt;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
