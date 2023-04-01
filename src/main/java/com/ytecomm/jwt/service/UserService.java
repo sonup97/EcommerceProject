@@ -5,6 +5,7 @@ import com.ytecomm.jwt.entity.User;
 import com.ytecomm.jwt.repository.RoleRepository;
 import com.ytecomm.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -17,6 +18,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public User registerNewUser(User user){
     return userRepository.save(user);}
 
@@ -35,7 +38,7 @@ public class UserService {
             adminUser.setUserFirstName("admin");
             adminUser.setUserLastName("admin");
             adminUser.setUserName("admin123");
-            adminUser.setUserPassword("admin@pass");
+            adminUser.setUserPassword(getEncodedPassword("admin@pass"));
             Set<Role> adminRoles =new HashSet<>();
             adminRoles.add(adminRole);
 //            System.out.println(adminRoles);
@@ -46,7 +49,7 @@ public class UserService {
             user.setUserFirstName("sonu");
             user.setUserLastName("pandit");
             user.setUserName("sonu123");
-            user.setUserPassword("sonu@pass");
+            user.setUserPassword(getEncodedPassword("sonu@pass"));
             Set<Role> userRoles =new HashSet<>();
             userRoles.add(userRole);
             user.setRole(userRoles);
@@ -54,5 +57,8 @@ public class UserService {
 
 
 
+        }
+        public String getEncodedPassword(String password){
+            return passwordEncoder.encode(password);
         }
 }
