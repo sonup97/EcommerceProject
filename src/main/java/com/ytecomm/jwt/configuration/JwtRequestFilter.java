@@ -32,15 +32,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String userName = null;
 
 
-        final String header = httpServletRequest.getHeader("Authorization");
+        final String requestTokenHeader = httpServletRequest.getHeader("Authorization");
         String header1 = httpServletRequest.getHeader("Authorization");
         System.out.println(header1);
 
 
-        System.out.println(header);
-        if(header!=null && header.startsWith("Bearer ")){
+        System.out.println(requestTokenHeader);
+        if(requestTokenHeader!=null && requestTokenHeader.startsWith("Bearer ")){
             System.out.println("Inside If Block to get Brerer token");
-            jwtToken = header.substring(7);
+            jwtToken = requestTokenHeader.substring(7);
             System.out.println(jwtToken);
 
             try{
