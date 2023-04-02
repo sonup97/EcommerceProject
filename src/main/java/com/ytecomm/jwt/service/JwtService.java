@@ -23,10 +23,10 @@ import java.util.Set;
 public class JwtService implements UserDetailsService {
 
     @Autowired
-    private UserRepository userRepository;
+    private JwtUtil jwtUtil;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -34,49 +34,45 @@ public class JwtService implements UserDetailsService {
     public JwtResponse createJwtToken(JwtRequest jwtRequest) throws Exception {
         String userName = jwtRequest.getUserName();
         String userPassword = jwtRequest.getUserPassword();
-        authenticate(userName,userPassword);
+        authenticate(userName, userPassword);
 
-       final UserDetails userDetails = loadUserByUsername(userName);
-       String newGenerateToken = jwtUtil.generateToken(userDetails);
-       User user = userRepository.findById(userName).get();
+        UserDetails userDetails = loadUserByUsername(userName);
+        String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-       return  new JwtResponse(user, newGenerateToken);
-
+        User user = userRepository.findById(userName).get();
+        return new JwtResponse(user, newGeneratedToken);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findById(username).get();
 
-        if(user != null){
+        if (user != null) {
             return new org.springframework.security.core.userdetails.User(
                     user.getUserName(),
                     user.getUserPassword(),
-                    getAuthorities(user)
+                    getAuthority(user)
             );
-        }else {
-                throw new UsernameNotFoundException("Username is not valid");
+        } else {
+            throw new UsernameNotFoundException("User not found with username: " + username);
         }
     }
 
-    private Set getAuthorities(User user){
-        Set authorities = new HashSet();
+    private Set getAuthority(User user) {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRole().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("Role" + role.getRoleName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRoleName()));
         });
         return authorities;
     }
 
-    private void authenticate(String userName , String userPassword) throws Exception {
+    private void authenticate(String userName, String userPassword) throws Exception {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,userPassword));
-
-        }catch (DisabledException e){
-            throw new Exception("User is disabled");
-        }catch (BadCredentialsException e ){
-            throw new Exception("Bad credentials from user");
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
-
-
 }
