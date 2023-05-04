@@ -49,15 +49,15 @@ public class UserService {
             adminUser.setRole(adminRoles);
             userRepository.save(adminUser);
 
-//            User user = new User();
-//            user.setUserFirstName("sonu");
-//            user.setUserLastName("pandit");
-//            user.setUserName("sonu123");
-//            user.setUserPassword(getEncodedPassword("sonu@pass"));
-//            Set<Role> userRoles =new HashSet<>();
-//            userRoles.add(userRole);
-//            user.setRole(userRoles);
-//            userRepository.save(user);
+            User user = new User();
+            user.setUserFirstName("sonu");
+            user.setUserLastName("pandit");
+            user.setUserName("sonu123");
+            user.setUserPassword(getEncodedPassword("sonu@pass"));
+            Set<Role> userRoles =new HashSet<>();
+            userRoles.add(userRole);
+            user.setRole(userRoles);
+            userRepository.save(user);
 
 
 
