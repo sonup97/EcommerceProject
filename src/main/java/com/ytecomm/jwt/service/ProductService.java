@@ -5,6 +5,7 @@ import com.ytecomm.jwt.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,4 +31,20 @@ public class ProductService {
     public Product getProductDetailsById(Integer productId){
        return productRepository.findById(productId).get();
     }
+
+    public List<Product> getProductDetails(boolean isSingleProductCheckout, Integer productId){
+        if(isSingleProductCheckout){
+            //We are going to buy single product
+            List<Product> list = new ArrayList<>();
+            Product product = productRepository.findById(productId).get();
+            list.add(product);
+            return list;
+        }
+        else {
+            //We are going to checkout entire cart
+        }
+
+        return new ArrayList<>();
+    }
+
 }
