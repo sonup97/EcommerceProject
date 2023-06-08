@@ -20,13 +20,28 @@ public class UserService {
     private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     public User registerNewUser(User user){
         Role role = roleRepository.findById("User").get();
-        Set<Role> userRoles = new HashSet<>();
-        userRoles.add(role);
-        user.setRole(userRoles);
-        user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(role);
+
+        user.setRole(roleSet);
+        String password = getEncodedPassword(user.getUserPassword());
+        user.setUserPassword(password);
         return userRepository.save(user);}
+
+//    public String getEncodedPassword(String password){
+//        return passwordEncoder.encode(password);
+//    }
+
+//    public User registerNewUser(User user){
+//        Role role = roleRepository.findById("User").get();
+//        Set<Role> userRoles = new HashSet<>();
+//        userRoles.add(role);
+//        user.setRole(userRoles);
+//        user.setUserPassword(getEncodedPassword(user.getUserPassword()));
+//        return userRepository.save(user);}
 
     public void initRolesAndUser(){
         Role adminRole = new Role();
