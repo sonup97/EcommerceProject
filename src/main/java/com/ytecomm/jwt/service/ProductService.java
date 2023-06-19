@@ -20,9 +20,16 @@ public class ProductService {
         return productRepository.save(product);
 
     }
-    public List<Product> getAllProducts(int pageNumber){
+    public List<Product> getAllProducts(int pageNumber, String searchKey){
         Pageable pageable = PageRequest.of(pageNumber,10);
-        return (List<Product>)productRepository.findAll(pageable);
+        if(searchKey.equals("")){
+            return (List<Product>)productRepository.findAll(pageable);
+        }else {
+           return (List<Product>) productRepository.findByProductNameContainingIgnoreCaseOrProductDescriptionContainingIgnoreCase(
+                    searchKey,searchKey,pageable
+            );
+        }
+
     }
 
     public void deleteProductDetails(Integer productId){

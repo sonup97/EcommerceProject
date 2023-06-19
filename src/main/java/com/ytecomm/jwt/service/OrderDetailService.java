@@ -29,6 +29,8 @@ public class OrderDetailService {
 
         for(OrderProductQuantity o : productQuantityList){
             Product product = productRepository.findById(o.getProductId()).get();
+
+
             String currentUser = JwtRequestFilter.CURRENT_USER;
             User user = userRepository.findById(currentUser).get();
 
