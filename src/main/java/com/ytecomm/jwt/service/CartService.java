@@ -10,6 +10,8 @@ import com.ytecomm.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CartService {
 
@@ -35,5 +37,10 @@ public class CartService {
             return cartRepository.save(cart);
         }
         return null;
+    }
+    public List<Cart> getCartDetails(){
+        String username = JwtRequestFilter.CURRENT_USER;
+       User user =  userRepository.findById(username).get();
+        return cartRepository.findByUser(user);
     }
 }
