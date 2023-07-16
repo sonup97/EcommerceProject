@@ -25,6 +25,10 @@ public class CartService {
     @Autowired
     private UserRepository userRepository;
 
+    public void deleteCartItem(Integer cartId){
+        cartRepository.deleteById(cartId);
+    }
+
     public Cart addToCart(Integer productId){
         Product product = productRepository.findById(productId).get();
         String username = JwtRequestFilter.CURRENT_USER;
