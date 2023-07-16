@@ -17,9 +17,9 @@ public class OrderDetailController {
     private OrderDetailService orderDetailService;
 
     @PreAuthorize("hasRole('User')")
-    @PostMapping({"/placeOrder/isCartCheckout"})
-    public void placeOrder(@PathVariable(name = "isCartCheckout") boolean isCartCheckout,
+    @PostMapping({"/placeOrder/isSingleProductCheckout"})
+    public void placeOrder(@PathVariable(name = "isSingleProductCheckout") boolean isSingleProductCheckout,
             @RequestBody OrderInput orderInput){
-        orderDetailService.placeOrder(orderInput,isCartCheckout);
+        orderDetailService.placeOrder(orderInput,isSingleProductCheckout);
     }
 }

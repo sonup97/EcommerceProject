@@ -28,7 +28,7 @@ public class OrderDetailService {
     private CartRepository cartRepository;
 
 
-    public void placeOrder(OrderInput orderInput, boolean isCartCheckout){
+    public void placeOrder(OrderInput orderInput, boolean isSingleProductCheckout){
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
 
         for(OrderProductQuantity o : productQuantityList){
@@ -51,7 +51,7 @@ public class OrderDetailService {
             );
 
             // empty the cart.
-            if(isCartCheckout){
+            if(!isSingleProductCheckout){
                 List<Cart> carts = cartRepository.findByUser(user);
                 carts.stream().forEach(x -> cartRepository.deleteById(x.getCartId()));
             }
