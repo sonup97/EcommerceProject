@@ -2,6 +2,7 @@ package com.ytecomm.jwt.service;
 
 import com.ytecomm.jwt.configuration.JwtRequestFilter;
 import com.ytecomm.jwt.entity.*;
+import com.ytecomm.jwt.repository.CartRepository;
 import com.ytecomm.jwt.repository.OrderDetailRepository;
 import com.ytecomm.jwt.repository.ProductRepository;
 import com.ytecomm.jwt.repository.UserRepository;
@@ -23,8 +24,11 @@ public class OrderDetailService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private CartRepository cartRepository;
 
-    public void placeOrder(OrderInput orderInput){
+
+    public void placeOrder(OrderInput orderInput, boolean isCartCheckout){
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
 
         for(OrderProductQuantity o : productQuantityList){
@@ -45,6 +49,12 @@ public class OrderDetailService {
                     product,
                     user
             );
+
+            // empty the cart.
+            if(isCartCheckout){
+                List<Cart> carts = cartRepository.findByUser(user);
+                carts.stream().forEach(x -> cartRepository.deleteById(x.getCartId()));
+            }
             orderDetailRepository.save(orderDetail);
         }
 
