@@ -9,6 +9,7 @@ import com.ytecomm.jwt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +27,27 @@ public class OrderDetailService {
 
     @Autowired
     private CartRepository cartRepository;
+
+
+    public List<OrderDetail> getAllOrderDetails(String status){
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        if(status.equals("All")) {
+            orderDetailRepository.findAll().forEach(
+                    x -> orderDetails.add(x)
+            );
+        }else{
+            orderDetailRepository.findByOrderStatus(status).forEach(
+                    x -> orderDetails.add(x)
+            );
+        }
+         return orderDetails;
+    }
+    public List<OrderDetail> getOrderDetails(){
+         String currentUser = JwtRequestFilter.CURRENT_USER;
+         User user = userRepository.findById(currentUser).get();
+
+         return orderDetailRepository.findByUser(user);
+    }
 
 
     public void placeOrder(OrderInput orderInput, boolean isSingleProductCheckout){
@@ -58,5 +80,12 @@ public class OrderDetailService {
             orderDetailRepository.save(orderDetail);
         }
 
+    }
+    public void markOrderAsDelivered(Integer orderId){
+        OrderDetail orderDetail = orderDetailRepository.findById(orderId).get();
+        if(orderDetail != null){
+            orderDetail.setOrderStatus("Delivered");
+            orderDetailRepository.save(orderDetail);
+        }
     }
 }
