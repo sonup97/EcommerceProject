@@ -24,6 +24,7 @@ public class UserController {
 
     @PostMapping({"/registerNewUser"})
     public User registerNewUser(@RequestBody User user){
+//        System.out.println(user.getEmail());
         return userService.registerNewUser(user);
     }
 //    @PostMapping({"/registerNewUser"})

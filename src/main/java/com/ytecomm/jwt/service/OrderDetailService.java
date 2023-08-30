@@ -85,6 +85,7 @@ public class OrderDetailService {
                 List<Cart> carts = cartRepository.findByUser(user);
                 carts.stream().forEach(x -> cartRepository.deleteById(x.getCartId()));
             }
+
             orderDetailRepository.save(orderDetail);
         }
 
